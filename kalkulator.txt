@@ -27,7 +27,7 @@ int read() {
 }
 
 int check(int x) {
-  if (x >= 99){
+  if (x >= 99 || x <= -99){
     return 0;
   } else {
   return 1;
