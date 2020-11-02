@@ -1,0 +1,121 @@
+int l1 = 0;
+int l2 = 0;
+int error1 = 0;
+int error2 = 0;
+float w = 0.0;
+
+
+void w_num()
+{
+ Serial.println("Wybierz operacje poprzez podanie numeru:");
+ Serial.println("1 - dodawanie");
+ Serial.println("2 - odejmowanie");
+ Serial.println("3 - mnozenie");
+ Serial.println("4 - dzielenie");
+ Serial.println("");
+}
+
+void setup()
+{
+ Serial.begin(9600);
+ w_num();
+}
+
+int read() {
+	while(Serial.available() == 0);
+  	return Serial.parseInt();
+}
+
+int check(int x) {
+  if (x >= 99){
+    return 0;
+  } else {
+  return 1;
+  }
+}
+
+void loop()
+{   
+    switch (read()) {
+    case 1:
+      Serial.println("Dodawanie");
+      Serial.println("Wprowadz pierwsza liczbe");
+	  l1 = read();
+      error1 = check(l1);
+      Serial.println("Wprowadz druga liczbe ");
+	  l2 = read();
+      error2 = check(l2);
+      if (error1 == 1 && error2 == 1){
+      	w = l1 + l2;
+      	Serial.println("Wynik: ");
+      	Serial.println(w);
+      } else {
+      Serial.println("Obie liczby musza byc maksymalnie dwucyfrowe");
+      }
+      break;
+      
+     case 2:
+      Serial.println("Odejmowanie");
+      Serial.println("Wprowadz pierwsza liczbe");
+	  l1 = read();
+      error1 = check(l1);
+      Serial.println("Wprowadz druga liczbe ");
+	  l2 = read();
+      error2 = check(l2);
+      if (error1 == 1 && error2 == 1){
+      	w = l1 - l2;
+      	Serial.println("Wynik: ");
+      	Serial.println(w);
+      } else {
+      Serial.println("Obie liczby musza byc maksymalnie dwucyfrowe");
+      }
+      break;
+      
+     case 3:
+      Serial.println("Mnozenie");
+      Serial.println("Wprowadz pierwsza liczbe");
+	  l1 = read();
+      error1 = check(l1);
+      Serial.println("Wprowadz druga liczbe ");
+	  l2 = read();
+      error2 = check(l2);
+      if (error1 == 1 && error2 == 1){
+      	w = l1 * l2;
+      	Serial.println("Wynik: ");
+      	Serial.println(w);
+      } else {
+      Serial.println("Obie liczby musza byc maksymalnie dwucyfrowe");
+      }
+      break;
+      
+     case 4:
+      Serial.println("Dzielenie");
+      Serial.println("Wprowadz pierwsza liczbe");
+	  l1 = read();
+      error1 = check(l1);
+      Serial.println("Wprowadz druga liczbe ");
+	  l2 = read();
+      error2 = check(l2);
+      if (l2 == 0){
+      Serial.println("Nie mozna dzielic przez 0");
+      }
+      else{
+		if (error1 == 1 && error2 == 1){
+      	w = l1 / l2;
+      	Serial.println("Wynik: ");
+      	Serial.println(w);
+      } else {
+      Serial.println("Obie liczby musza byc maksymalnie dwucyfrowe");
+      }
+      }
+      break;
+     default:
+      Serial.println("Nie ma takiej operacji");
+      break;
+    
+
+ }
+  Serial.println("");
+  Serial.println("Mozesz wybrac operacje jeszcze raz");
+  w_num();
+}

@@ -1,0 +1,73 @@
+
+int n = 0;					//deklaracja zmiennych
+int i = 0;
+int buttonstate1 = 0;
+int lastbuttonstate1 = 0;
+int buttonstate2 = 0;
+int buttonstate3 = 0;
+void setup()				//wykonanie podczas pierwszego uruchomienia
+{
+  
+ Serial.begin(9600);
+  pinMode(3, INPUT);
+  pinMode(4, INPUT);
+  pinMode(5, INPUT);
+  pinMode(10, OUTPUT);
+  pinMode(12, OUTPUT);
+  digitalWrite(12, LOW);
+  digitalWrite(10, LOW);
+}
+
+
+void loop()
+{
+
+
+  
+  buttonstate1=digitalRead(3);		//odczyt stanów wejść
+  buttonstate2=digitalRead(4);
+  buttonstate3=digitalRead(5);
+  
+	 if (buttonstate1 != lastbuttonstate1)	//wykrywanie zmiany stanu przysicku
+	{
+ 		 if (buttonstate1==HIGH){	// jeśli zmiana z LOW na HIGH to
+ 		  delay(10);				// czekaj 10ms
+  
+				if(buttonstate1==HIGH && i==0){	//sprawdź stan jeszcze raz
+ 				  i=1;
+                  n = n+1;						// zapis liczby naciśnięć 
+                }
+				else if (buttonstate1==HIGH && i==1)
+          			{
+ 				  i=0;  
+                  n = n+1;						// zapis liczby naciśnięć
+					}
+           
+             }
+     }
+   	
+      
+lastbuttonstate1=buttonstate1;		//zapis aktualnego  stanu przycisku jako poprzedni
+  
+  if(i==1){						// przycisk 1 naciśnięty na kręcenie
+    
+    if(buttonstate2==HIGH){		// kręcenie w prawo
+      digitalWrite(10, HIGH);
+      digitalWrite(12, LOW);
+    }
+    if(buttonstate3==HIGH){		// kręcenie w lewo
+      digitalWrite(12, HIGH);
+      digitalWrite(10, LOW);
+    }
+    
+    
+  } else {						//przycisk 1 naciśnięty na STOP
+
+    digitalWrite(12, LOW);		// zatrzymywanie napędu
+    digitalWrite(10, LOW);
+  
+  }
+  
+Serial.println(n);				// wyświetlanie liczby naciśnięć
+
+}
