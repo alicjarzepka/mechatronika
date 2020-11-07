@@ -1,0 +1,66 @@
+
+
+int uchyb = 0;		//definicja zmiennych
+int zadana = 0;
+int aktualna = 0;
+int sterujacy = 0;
+int kp = 0;
+
+
+long czytaj_odleglosc(int pin_wyzwolenie, int pin_odczyt) //tworzenie funkcji czytającej odległość
+{
+  pinMode(pin_wyzwolenie, OUTPUT);
+  
+  
+  digitalWrite(pin_wyzwolenie, LOW);
+  delayMicroseconds(2);
+  digitalWrite(pin_wyzwolenie, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(pin_wyzwolenie, LOW);
+  pinMode(pin_odczyt, INPUT);
+  return pulseIn(pin_odczyt, HIGH);
+}
+
+void setup()				//wykonanie podczas pierwszego uruchomienia
+{
+  
+ Serial.begin(9600);		//określenie charakteru używanych pinów
+  pinMode(10, OUTPUT);
+  pinMode(12, OUTPUT);
+  digitalWrite(12, LOW);
+  digitalWrite(10, LOW);  
+}
+
+void loop()
+{
+zadana = 100;				//określanie pozycji zadanej
+aktualna = 0.01723 * czytaj_odleglosc(7, 7);	//czytanie pozycji aktualnej
+Serial.println(aktualna);
+
+
+uchyb = zadana-aktualna;		//oblicznie uchybu
+
+kp = 2;							//określanie wzmocnienia regulatora typu P
+sterujacy = uchyb*kp;			// równanie regulatora typu P
+
+if (sterujacy > 255)				//ograniczenie sygnału sterującego
+{ sterujacy = 255;}
+  else if (sterujacy < -255)
+  {sterujacy = -255;}
+    
+  if (sterujacy>=0)					//zmiana kierunku obrotów
+  {
+	   digitalWrite(10, LOW);
+    digitalWrite(12, HIGH);
+  }
+
+  if (sterujacy<0)					
+  {
+    sterujacy=abs(sterujacy);		//wartość bezwzględna kierunek ustalany na wyjściach 10,12
+    digitalWrite(10, HIGH);
+      digitalWrite(12, LOW);
+  }
+  
+  
+analogWrite(6,sterujacy);	//przepisywanie wypełnienia sygnału PWM na wyjście 6 wysterowujące układ scalnoy 
+}
